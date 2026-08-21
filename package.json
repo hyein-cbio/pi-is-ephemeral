@@ -1,0 +1,23 @@
+{
+  "name": "pi-is-ephemeral",
+  "version": "0.1.0",
+  "description": "Show ephemeral session state in Pi's built-in footer.",
+  "type": "module",
+  "keywords": [
+    "pi-package"
+  ],
+  "peerDependencies": {
+    "@earendil-works/pi-coding-agent": "*"
+  },
+  "pi": {
+    "extensions": [
+      "./extensions"
+    ]
+  },
+  "files": [
+    "extensions",
+    "README.md",
+    "package.json"
+  ],
+  "license": "MIT"
+}
