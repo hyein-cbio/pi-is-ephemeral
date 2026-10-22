@@ -21,3 +21,11 @@ pi -e npm:pi-is-ephemeral --no-session
 ```sh
 pi remove npm:pi-is-ephemeral
 ```
+
+## Test
+
+Requires Node.js 22.19+; no dependency installation is needed.
+
+```sh
+npm test
+```

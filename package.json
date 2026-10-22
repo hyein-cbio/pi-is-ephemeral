@@ -11,6 +11,9 @@
     "url": "https://github.com/hyein-cbio/pi-is-ephemeral/issues"
   },
   "type": "module",
+  "scripts": {
+    "test": "node --test test/*.test.mjs"
+  },
   "keywords": [
     "pi-package"
   ],
