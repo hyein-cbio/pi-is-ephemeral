@@ -1,6 +1,6 @@
 {
   "name": "pi-is-ephemeral",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "description": "Show ephemeral session state in Pi's built-in footer.",
   "repository": {
     "type": "git",
