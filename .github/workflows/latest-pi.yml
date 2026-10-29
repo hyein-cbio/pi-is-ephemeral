@@ -1,0 +1,33 @@
+name: Latest Pi compatibility
+
+on:
+  schedule:
+    # Monthly on the 1st at 15:00 UTC (00:00 KST on the 2nd).
+    - cron: "0 15 1 * *"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    env:
+      PI_OFFLINE: "1"
+    steps:
+      - uses: actions/checkout@v6
+      - uses: actions/setup-node@v6
+        with:
+          node-version: "lts/*"
+      - name: Install the current npm latest Pi (without pinning or lifecycle scripts)
+        run: npm install --no-save --package-lock=false --ignore-scripts @earendil-works/pi-coding-agent@latest
+      - name: Report tested versions
+        run: |
+          node --version
+          npm ls @earendil-works/pi-coding-agent --depth=0
+          node_modules/.bin/pi --version
+      - name: Unit tests
+        run: npm test
+      - name: Real Pi integration tests
+        run: npm run test:integration
