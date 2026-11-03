@@ -11,23 +11,28 @@ permissions:
 
 jobs:
   test:
-    runs-on: instabox-medium
-    timeout-minutes: 10
-    env:
-      PI_OFFLINE: "1"
+    name: Latest Pi compatibility on Modal
+    # GitHub only dispatches work; installation and tests run on Modal.
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
     steps:
-      - uses: actions/checkout@v6
-      - uses: actions/setup-node@v6
+      - uses: actions/checkout@d23441a48e516b6c34aea4fa41551a30e30af803 # v6
         with:
-          node-version: "lts/*"
-      - name: Install the current npm latest Pi (without pinning or lifecycle scripts)
-        run: npm install --no-save --package-lock=false --ignore-scripts @earendil-works/pi-coding-agent@latest
-      - name: Report tested versions
+          persist-credentials: false
+      - uses: actions/setup-python@ece7cb06caefa5fff74198d8649806c4678c61a1 # v6
+        with:
+          python-version: "3.11"
+          cache: pip
+          cache-dependency-path: ci/requirements.txt
+      - name: Install Modal SDK
+        run: python -m pip install -r ci/requirements.txt
+      - name: Install latest Pi and run compatibility checks on Modal
+        env:
+          MODAL_TOKEN_ID: ${{ secrets.MODAL_TOKEN_ID }}
+          MODAL_TOKEN_SECRET: ${{ secrets.MODAL_TOKEN_SECRET }}
         run: |
-          node --version
-          npm ls @earendil-works/pi-coding-agent --depth=0
-          node_modules/.bin/pi --version
-      - name: Unit tests
-        run: npm test
-      - name: Real Pi integration tests
-        run: npm run test:integration
+          if [[ -z "$MODAL_TOKEN_ID" || -z "$MODAL_TOKEN_SECRET" ]]; then
+            echo "::error::MODAL_TOKEN_ID and MODAL_TOKEN_SECRET must be set."
+            exit 1
+          fi
+          modal run ci/modal_ci.py::run_tests

@@ -32,7 +32,7 @@ npm test
 
 ### Latest Pi compatibility
 
-The [compatibility workflow](.github/workflows/latest-pi.yml) runs on the 1st of every month at 15:00 UTC (00:00 KST on the 2nd), or manually from the Actions tab. Each run installs the current npm `latest` Pi release without a lockfile, logs its version, and runs both the unit and integration tests on the latest Node.js LTS. No API keys, automatic fixes, or PR creation are involved.
+The [compatibility workflow](.github/workflows/latest-pi.yml) runs on the 1st of every month at 15:00 UTC (00:00 KST on the 2nd), or manually from the Actions tab. GitHub Actions dispatches each run to an isolated Modal container, which installs the current npm `latest` Pi release without a lockfile, logs its version, and runs both the unit and integration tests on the latest Node.js LTS. The dispatcher uses the existing `MODAL_TOKEN_ID` and `MODAL_TOKEN_SECRET` Actions secrets. No model API keys, automatic fixes, or PR creation are involved.
 
 The integration tests launch the real Pi CLI in RPC mode and load this package through its manifest. They verify status updates for ephemeral and persistent startup, new sessions, and resuming a saved session (including clearing a stale `ephemeral` label). They use isolated temporary settings and sessions, run Pi offline, and make no model requests. They check Pi's actual status API output, not terminal pixel rendering; the unit test additionally checks that other extensions' statuses are preserved.
 
